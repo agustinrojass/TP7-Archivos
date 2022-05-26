@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1653154548 source:c:\users\usuario\documents\utn\2022\1er cuatrimestre\programación\archivos c\tp7 - archivos\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
