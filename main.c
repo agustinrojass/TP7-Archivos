@@ -28,8 +28,10 @@ void ejercicio16();
 void ejercicio17();
 
 void carga();
-void cargaAlumno(stAlumno alumno,int i);
-void muestraAlumno();
+stAlumno cargaAlumno();
+void muestra();
+void muestraAlumno(stAlumno alumno);
+int cuentaAlumnos();
 
 
 int main()
@@ -63,173 +65,234 @@ int main()
         while(ejercicio!=1 && ejercicio!=2 && ejercicio!=3 && ejercicio!=4 && ejercicio!=5 && ejercicio!=6 && ejercicio!=7 && ejercicio!=8 && ejercicio!=9 && ejercicio!=10 && ejercicio!=11 && ejercicio!=12 && ejercicio!=13 && ejercicio!=14 && ejercicio!=15 && ejercicio!=16 && ejercicio!=17 && ejercicio!=0);
         if(ejercicio!=0)
         {
-            printf("\nEJERCICIO %i\n\n",ejercicio);
+            system("cls");
+            printf("EJERCICIO %i\n\n",ejercicio);
         }
         switch(ejercicio)
         {
             case 1:
             {
                 ejercicio1();
+                system("pause");
+                system("cls");
             }
             break;
             case 2:
             {
                 ejercicio2();
+                system("pause");
+                system("cls");
             }
             break;
             case 3:
             {
                 ejercicio3();
+                system("pause");
+                system("cls");
             }
             break;
             case 4:
             {
                 ejercicio4();
+                system("pause");
+                system("cls");
             }
             break;
             case 5:
             {
                 ejercicio5();
+                system("pause");
+                system("cls");
             }
             break;
             case 6:
             {
                 ejercicio6();
+                system("pause");
+                system("cls");
             }
             break;
             case 7:
             {
                 ejercicio7();
+                system("pause");
+                system("cls");
             }
             break;
             case 8:
             {
                 ejercicio8();
+                system("pause");
+                system("cls");
             }
             break;
             case 9:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 10:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 11:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 12:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 13:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 14:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 15:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 16:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
             case 17:
             {
                 ejercicio9();
+                system("pause");
+                system("cls");
             }
             break;
         }
     }
     while(ejercicio!=0);
     printf("\nTP7 TERMINADO\n");
-    printf("\nVersion 1.0\n");
+    printf("\nVersion 1.1\n");
     return 0;
 }
 
-void carga()                                                                         //FUNCION CARGA
+void carga()                                                                        //FUNCION CARGA
 {
     int i;
     char continuar='s';
     stAlumno alumno;
-    for(i=0;i<15 && continuar=='s';i++)
-    {
-        cargaAlumno(alumno,i);                                                      //FUNCION CARGAALUMNO
-        printf("Desea cargar otro alumno? (s|n): ");
-        fflush(stdin);
-        scanf("%c",&continuar);
-        printf("\n");
-    }
-}
-void cargaAlumno(stAlumno alumno,int i)                                             //FUNCION CARGAALUMNO
-{
-    FILE *archivo=fopen("archivo2","ab");
+    FILE *archivo=fopen("Legajos","ab");
     if(archivo!=NULL)
     {
-        printf("Ingrese el numero de legajo del alumno: ");
-        scanf("%i",&alumno.legajo);
-        printf("Ingrese el nombre y apellido del alumno: ");
-        fflush(stdin);
-        gets(alumno.nombre);
-        printf("Ingrese la edad del alumno: ");
-        scanf("%i",&alumno.edad);
-        printf("Ingrese el ano que cursa el alumno: ");
-        scanf("%i",&alumno.ano);
-        fwrite(&alumno,sizeof(alumno),1,archivo);
+        for(i=0;i<15 && continuar=='s';i++)
+        {
+            alumno=cargaAlumno();
+            fwrite(&alumno,sizeof(stAlumno),1,archivo);
+            printf("Desea cargar otro alumno? (s|n): ");
+            fflush(stdin);
+            scanf("%c",&continuar);
+            printf("\n");
+        }
         fclose(archivo);
     }
 }
-void muestraAlumno()                                                                //FUNCION MUESTRAALUMNO
+stAlumno cargaAlumno()                                                              //FUNCION CARGAALUMNO
 {
     stAlumno alumno;
-    FILE *archivo=fopen("archivo2","rb");
-    while(fread(&alumno,sizeof(alumno),1,archivo)>0)
+    printf("Ingrese el numero de legajo del alumno: ");
+    scanf("%i",&alumno.legajo);
+    printf("Ingrese el nombre y apellido del alumno: ");
+    fflush(stdin);
+    gets(alumno.nombre);
+    printf("Ingrese la edad del alumno: ");
+    scanf("%i",&alumno.edad);
+    printf("Ingrese el ano que cursa el alumno: ");
+    scanf("%i",&alumno.ano);
+    return alumno;
+}
+void muestra()                                                                      //FUNCION MUESTRA
+{
+    stAlumno alumno;
+    FILE *archivo=fopen("Legajos","rb");
+    if(archivo!=NULL)
     {
-        printf("%i - %s\n\n",alumno.legajo,alumno.nombre);
+        while(fread(&alumno,sizeof(stAlumno),1,archivo)>0)
+        {
+            muestraAlumno(alumno);
+        }
+        fclose (archivo);
     }
-    fclose (archivo);
 }
 
-
-
-
+void muestraAlumno(stAlumno alumno)                                                 //FUNCION MUESTRAALUMNO
+{
+    printf(" ________________________________________ \n");
+    printf("| LEGAJO DE ALUMNO                       |\n");
+    printf("|________________________________________|\n");
+    printf("| LEGAJO: %-30i |\n",alumno.legajo);
+    printf("|________________________________________|\n");
+    printf("| NOMBRE: %-30s |\n",alumno.nombre);
+    printf("|________________________________________|\n");
+    printf("| EDAD: %-32i |\n",alumno.edad);
+    printf("|________________________________________|\n");
+    printf("| ANO QUE CURSA: %-23i |\n",alumno.ano);
+    printf("|________________________________________|\n");
+}
+int cuentaAlumnos()                                                                 //FUNCION CUENTAALUMNO
+{
+    int i=0;
+    stAlumno aux;
+    FILE *archivo=fopen("Legajos","rb");
+    if(archivo!=NULL)
+    {
+        while(fread(&aux,sizeof(stAlumno),1,archivo)>0)
+        {
+            i++;
+        }
+        fclose (archivo);
+    }
+    return i;
+}
 
 void ejercicio1()
 {
     //Hacer una funcion que agregue un elemento al final de un archivo.
     stAlumno alumno[10];
     carga(alumno);
-    muestraAlumno();
 }
 void ejercicio2()
 {
     //Hacer una funcion que muestre por pantalla el contenido de un archivo.
-    stAlumno alumno[10];
-    carga(alumno);
-    muestraAlumno();
+    muestra();
+    printf("\n");
 }
 void ejercicio3()
 {
     //Hacer una funcion que retorne la cantidad de registros que contiene un archivo.
     int cantidad;
-    stAlumno alumno[10];
-    carga(alumno);
-    muestraAlumno();
-
-    //HACER FUNCION QUE CUENTE
+    cantidad=cuentaAlumnos();
+    printf("El archivo contiene %i alumnos.\n\n",cantidad);
 }
 void ejercicio4()
 {
@@ -237,6 +300,7 @@ void ejercicio4()
     //Abrirlo de manera tal de verificar si el archivo ya esta creado previamente.
     //Cargar el archivo con 5 datos.
     //Cerrarlo dentro de la funcion.
+
 }
 void ejercicio5()
 {
