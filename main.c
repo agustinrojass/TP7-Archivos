@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "Pila.h"
 typedef struct
 {
     int legajo;
@@ -26,14 +26,19 @@ void ejercicio14();
 void ejercicio15();
 void ejercicio16();
 void ejercicio17();
-
 void carga();
 stAlumno cargaAlumno();
 void muestra();
-void muestraAlumno(stAlumno alumno);
+void muestraAlumno(stAlumno aux);
 int cuentaAlumnos();
-
-
+void pasaPila(Pila *pila) ;
+void mostrarPila(Pila pila);
+int cuentaAlumnosMayores();
+void rango(int *minimo,int *maximo);
+void muestraAlumnosRango(int minimo,int maximo);
+void muestraAlumnosMayores();
+void preguntaAno(int *ano);
+int cuentaAlumnosAno(int ano);
 int main()
 {
     int ejercicio;
@@ -135,56 +140,56 @@ int main()
             break;
             case 10:
             {
-                ejercicio9();
+                ejercicio10();
                 system("pause");
                 system("cls");
             }
             break;
             case 11:
             {
-                ejercicio9();
+                ejercicio11();
                 system("pause");
                 system("cls");
             }
             break;
             case 12:
             {
-                ejercicio9();
+                ejercicio12();
                 system("pause");
                 system("cls");
             }
             break;
             case 13:
             {
-                ejercicio9();
+                ejercicio13();
                 system("pause");
                 system("cls");
             }
             break;
             case 14:
             {
-                ejercicio9();
+                ejercicio14();
                 system("pause");
                 system("cls");
             }
             break;
             case 15:
             {
-                ejercicio9();
+                ejercicio15();
                 system("pause");
                 system("cls");
             }
             break;
             case 16:
             {
-                ejercicio9();
+                ejercicio16();
                 system("pause");
                 system("cls");
             }
             break;
             case 17:
             {
-                ejercicio9();
+                ejercicio17();
                 system("pause");
                 system("cls");
             }
@@ -193,10 +198,9 @@ int main()
     }
     while(ejercicio!=0);
     printf("\nTP7 TERMINADO\n");
-    printf("\nVersion 1.1\n");
+    printf("\nVersion 1.2\n");
     return 0;
 }
-
 void carga()                                                                        //FUNCION CARGA
 {
     int i;
@@ -233,30 +237,29 @@ stAlumno cargaAlumno()                                                          
 }
 void muestra()                                                                      //FUNCION MUESTRA
 {
-    stAlumno alumno;
+    stAlumno aux;
     FILE *archivo=fopen("Legajos","rb");
     if(archivo!=NULL)
     {
-        while(fread(&alumno,sizeof(stAlumno),1,archivo)>0)
+        while(fread(&aux,sizeof(stAlumno),1,archivo)>0)
         {
-            muestraAlumno(alumno);
+            muestraAlumno(aux);
         }
         fclose (archivo);
     }
 }
-
-void muestraAlumno(stAlumno alumno)                                                 //FUNCION MUESTRAALUMNO
+void muestraAlumno(stAlumno aux)                                                    //FUNCION MUESTRAALUMNO
 {
     printf(" ________________________________________ \n");
     printf("| LEGAJO DE ALUMNO                       |\n");
     printf("|________________________________________|\n");
-    printf("| LEGAJO: %-30i |\n",alumno.legajo);
+    printf("| LEGAJO: %-30i |\n",aux.legajo);
     printf("|________________________________________|\n");
-    printf("| NOMBRE: %-30s |\n",alumno.nombre);
+    printf("| NOMBRE: %-30s |\n",aux.nombre);
     printf("|________________________________________|\n");
-    printf("| EDAD: %-32i |\n",alumno.edad);
+    printf("| EDAD: %-32i |\n",aux.edad);
     printf("|________________________________________|\n");
-    printf("| ANO QUE CURSA: %-23i |\n",alumno.ano);
+    printf("| ANO QUE CURSA: %-23i |\n",aux.ano);
     printf("|________________________________________|\n");
 }
 int cuentaAlumnos()                                                                 //FUNCION CUENTAALUMNO
@@ -274,7 +277,110 @@ int cuentaAlumnos()                                                             
     }
     return i;
 }
-
+void pasaPila(Pila *pila)                                                           //FUNCION PASAPILA
+{
+    stAlumno aux;
+    FILE *archivo=fopen("Legajos","rb");
+    if(archivo!=NULL)
+    {
+        while(fread(&aux,sizeof(stAlumno),1,archivo)>0)
+        {
+            apilar(pila,aux.legajo);
+        }
+        fclose (archivo);
+    }
+}
+void mostrarPila(Pila pila)                                                         //FUNCION MUESTRAPILA
+{
+    int aux;
+    while(!pilavacia(&pila))
+    {
+        aux=desapilar(&pila);
+        printf("| %i |",aux);
+    }
+    printf("\n");
+}
+int cuentaAlumnosMayores()                                                          //FUNCION CUENTAALUMNOMAYORES
+{
+    int i=0;
+    stAlumno aux;
+    FILE *archivo=fopen("Legajos","rb");
+    if(archivo!=NULL)
+    {
+        while(fread(&aux,sizeof(stAlumno),1,archivo)>0)
+        {
+            if(aux.edad>=18)
+            {
+                i++;
+            }
+        }
+        fclose (archivo);
+    }
+    return i;
+}
+void rango(int *minimo,int *maximo)                                                 //FUNCION RANGO
+{
+    printf("Ingrese el minimo del rango: ");
+    scanf("%i",minimo);
+    printf("Ingrese el maximo del rango: ");
+    scanf("%i",maximo);
+}
+void muestraAlumnosRango(int minimo,int maximo)                                     //FUNCION MUESTRAALUMNORANGO
+{
+    stAlumno aux;
+    FILE *archivo=fopen("Legajos","rb");
+    if(archivo!=NULL)
+    {
+        while(fread(&aux,sizeof(stAlumno),1,archivo)>0)
+        {
+            if(aux.edad>=minimo && aux.edad<=maximo)
+            {
+                muestraAlumno(aux);
+            }
+        }
+        fclose (archivo);
+    }
+}
+void muestraAlumnosMayores()                                                        //FUNCION MUESTRAALUMNOMAYORES
+{
+    stAlumno aux;
+    FILE *archivo=fopen("Legajos","rb");
+    if(archivo!=NULL)
+    {
+        while(fread(&aux,sizeof(stAlumno),1,archivo)>0)
+        {
+            if(aux.edad>=18)
+            {
+                muestraAlumno(aux);
+            }
+        }
+        fclose (archivo);
+    }
+}
+void preguntaAno(int *ano)                                                          //FUNCION ANO
+{
+    printf("Ingrese un ano de la carrera: ");
+    scanf("%i",ano);
+    printf("\n");
+}
+int cuentaAlumnosAno(int ano)                                                       //FUNCION CUENTAALUMNO
+{
+    int i=0;
+    stAlumno aux;
+    FILE *archivo=fopen("Legajos","rb");
+    if(archivo!=NULL)
+    {
+        while(fread(&aux,sizeof(stAlumno),1,archivo)>0)
+        {
+            if(aux.ano==ano)
+            {
+                i++;
+            }
+        }
+        fclose (archivo);
+    }
+    return i;
+}
 void ejercicio1()
 {
     //Hacer una funcion que agregue un elemento al final de un archivo.
@@ -300,41 +406,66 @@ void ejercicio4()
     //Abrirlo de manera tal de verificar si el archivo ya esta creado previamente.
     //Cargar el archivo con 5 datos.
     //Cerrarlo dentro de la funcion.
-
+    stAlumno alumno[10];
+    carga(alumno);
+    muestra();
+    printf("\n");
 }
 void ejercicio5()
 {
     //Crear una funcion que muestre por pantalla los registros de un archivo de alumnos.
     //Modularizar.
+    muestra();
+    printf("\n");
 }
 void ejercicio6()
 {
     //Crear una funcion que permita agregar de a un elemento al final del archivo.
     //O sea, se debe abrir el archivo, se piden los datos (se llena una variable de tipo struct alumno), se escribe en el archivo y se cierra.
+    stAlumno alumno[10];
+    carga(alumno);
 }
 void ejercicio7()
 {
     //Crear una funcion que pase a una pila los numeros de legajo de los alumnos mayores de edad.
+    Pila pila;
+    inicpila(&pila);
+    pasaPila(&pila);
+    mostrarPila(pila);
+    printf("\n");
 }
 void ejercicio8()
 {
     //Dado un archivo de alumnos, hacer una funcion que cuente la cantidad de alumnos mayores a edad especifica que se envia por parametro.
+    int cantidad;
+    cantidad=cuentaAlumnosMayores();
+    printf("El archivo contiene %i alumnos mayores de edad.\n\n",cantidad);
 }
 void ejercicio9()
 {
     //Dado un archivo de alumnos, mostrar por pantalla el nombre de todos los alumnos entre un rango de edades específico (por ejemplo, entre 17 y 25 años).
     //Dicho rango debe recibirse por parametro.
     //Modularizar.
+    int minimo,maximo;
+    rango(&minimo,&maximo);
+    muestraAlumnosRango(minimo,maximo);
+    printf("\n");
 }
 void ejercicio10()
 {
     //Dado un archivo de alumnos, mostrar los datos del alumno de mayor edad.
     //Modularizar.
+    muestraAlumnosMayores();
+    printf("\n");
 }
 void ejercicio11()
 {
     //Crear una funcion que retorne la cantidad de alumnos que cursan un determinado año.
     //El año buscado se pasa por parametro.
+    int ano,cantidad;
+    preguntaAno(&ano);
+    cantidad=cuentaAlumnosAno(ano);
+    printf("El archivo contiene %i alumnos que cursan al ano %i de la carrera.\n\n",cantidad,ano);
 }
 void ejercicio12()
 {
